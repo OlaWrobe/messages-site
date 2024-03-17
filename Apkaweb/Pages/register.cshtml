@@ -1,0 +1,26 @@
+﻿@page
+@model Apkaweb.Pages.loginModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Login</h2>
+        <form method="post">
+            <div class="form-group">
+                <label for="loginInput">Login:</label>
+                <input type="text" class="form-control" id="loginInput" name="Login" placeholder="Enter your login">
+            </div>
+            <div class="form-group">
+                <label for="passwordInput">Password:</label>
+                <input type="password" class="form-control" id="passwordInput" name="Password" placeholder="Enter your password">
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+    </div>
+</body>
+</html>
