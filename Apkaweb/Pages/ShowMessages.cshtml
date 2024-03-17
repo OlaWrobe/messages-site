@@ -1,0 +1,44 @@
+﻿@page
+@model Apkaweb.Pages.ShowMessagesModel
+@{
+}
+
+<h1>Chat</h1>
+
+<div class="chat-container">
+    @foreach (var message in Model.Messages)
+    {
+            <div class="message @(message.UserId == "x" ? "right" : "left")">
+                <p>@message.Content</p>
+                <p>UserId: @message.UserId</p>
+
+            @if (Model.CanDeleteMessage(message.UserId))
+            {
+                        <form method="post" asp-page-handler="Delete" asp-route-MessageId="@message.Id">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+            }
+            </div>
+    }
+</div>
+
+<style>
+    .message {
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        background-color: #f9f9f9;
+        clear: both;
+    }
+
+    .right {
+        float: right;
+        background-color: #e0e0e0;
+    }
+
+    .left {
+        float: left;
+        background-color: #d0d0d0;
+    }
+</style>
