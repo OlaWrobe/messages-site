@@ -1,0 +1,32 @@
+﻿@page
+@model Apkaweb.Pages.NewMessageModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>New Message Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        #newMessageInput {
+            width: 900px; /* Ustawienie szerokości */
+            height: 90px;
+            overflow-y: auto; /* Wyświetlanie paska przewijania, gdy tekst się wydłuża */
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>New Message</h2>
+        <form method="post">
+            <label for="newMessageInput">Message:</label>
+            <div class="form-group">
+                <textarea type="text" class="newMessageInput" id="newMessageInput" name="Message" placeholder="Write a message..." required></textarea>
+                <!-- TO DO: przechpwywwanie -> asp-for="Message"-->
+            </div>
+            <button type="submit" class="btn btn-success">Send</button>
+            <a href="/Options" class="btn btn-secondary ml-2">Back</a>
+        </form>
+    </div>
+</body>
+</html>
