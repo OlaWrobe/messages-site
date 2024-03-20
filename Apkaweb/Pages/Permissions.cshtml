@@ -1,47 +1,16 @@
 ﻿@page
-@model Apkaweb.Pages.PermissionsModel
-@{
-}
+@model PermissionsModel
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>User Permissions</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
-    <div class="container mt-5">
-        <h2>User Permissions</h2>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Username</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var user in Model.Users)
-                {
-                        <tr>
-                            <td>@user.Username</td>
-                            <td>
-                            @if (user.HasPermission)
-                            {
-                                        <form method="post" asp-page-handler="RevokePermission" asp-route-username="@user.Username">
-                                            <button type="submit" class="btn btn-danger">Zabierz</button>
-                                        </form>
-                            }
-                            else
-                            {
-                                        <form method="post" asp-page-handler="GrantPermission" asp-route-username="@user.Username">
-                                            <button type="submit" class="btn btn-primary">Grant</button>
-                                        </form>
-                            }
-                            </td>
-                        </tr>
-                }
-            </tbody>
-        </table>
+<form method="post">
+    <div>
+        <label for="usersWithoutPermission">Users without Permission:</label>
+        <select asp-for="SelectedUserWithoutPermission" asp-items="Model.UsersWithoutPermission"></select>
+        <button type="submit" asp-page-handler="GrantPermission">Grant Permission</button>
     </div>
-</body>
-</html>
+    <br />
+    <div>
+        <label for="usersWithPermission">Users with Permission:</label>
+        <select asp-for="SelectedUserWithPermission" asp-items="Model.UsersWithPermission"></select>
+        <button type="submit" asp-page-handler="RevokePermission">Revoke Permission</button>
+    </div>
+</form>

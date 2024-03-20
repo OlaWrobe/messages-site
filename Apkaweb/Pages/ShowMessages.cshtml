@@ -12,15 +12,30 @@
                 <p>@message.Content</p>
                 <p>UserId: @message.UserId</p>
 
-            @if (Model.CanDeleteMessage(message.UserId))
+            @if (Model.CanDeleteMessage(message.UserId, message.Id))
             {
-                        <form method="post" asp-page-handler="Delete" asp-route-MessageId="@message.Id">
-                            <button type="submit" class="btn btn-danger">Delete</button>
+            <form method="post" asp-page-handler="Delete" asp-route-messageId="@message.Id">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+            }
+
+            @if (Model.CanEditMessage(message.UserId))
+            {
+                        <form method="post" asp-page-handler="Edit" asp-route-MessageId="@message.Id">
+                            <textarea class="form-control" rows="3" name="NewContent">@message.Content</textarea>
+                            <button type="submit" class="btn btn-primary">Edit</button>
                         </form>
             }
             </div>
     }
 </div>
+
+<form method="post">
+    <div class="form-group">
+        <textarea class="form-control" id="messageInput" rows="3" asp-for="NewMessage"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Send</button>
+</form>
 
 <style>
     .message {

@@ -1,9 +1,9 @@
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Apkaweb.Pages
 {
@@ -16,95 +16,142 @@ namespace Apkaweb.Pages
             _configuration = configuration;
         }
 
-        public List<UserPermission> Users { get; set; } = new List<UserPermission>();
+        [BindProperty]
+        public string SelectedUserWithoutPermission { get; set; }
+
+        [BindProperty]
+        public string SelectedUserWithPermission { get; set; }
+
+        public List<SelectListItem> UsersWithoutPermission { get; set; }
+        public List<SelectListItem> UsersWithPermission { get; set; }
 
         public async Task OnGetAsync()
         {
-            await LoadUserPermissionsAsync();
+            await PopulateUserOptionsAsync();
         }
 
-        public async Task<IActionResult> OnPostGrantPermissionAsync(string username)
+        public async Task<IActionResult> OnPostGrantPermissionAsync()
         {
-            // Implement logic to grant permission to the specified user
-            return RedirectToPage("/Permissions");
+            await GrantPermissionAsync(SelectedUserWithoutPermission);
+            return RedirectToPage("./Permissions");
         }
 
-        public async Task<IActionResult> OnPostRevokePermissionAsync(string username)
+        public async Task<IActionResult> OnPostRevokePermissionAsync()
         {
-            // Implement logic to revoke permission from the specified user
-            return RedirectToPage("/Permissions");
+            await RevokePermissionAsync(SelectedUserWithPermission);
+            return RedirectToPage("./Permissions");
         }
 
-        private async Task LoadUserPermissionsAsync()
+        private async Task PopulateUserOptionsAsync()
         {
-            Users.Clear();
-
             string connectionString = _configuration.GetConnectionString("DefaultConnection");
 
             using (var connection = new MySqlConnection(connectionString))
             {
                 await connection.OpenAsync();
 
-                string query = "SELECT DISTINCT TargetUsername FROM Permissions"; // Fetch distinct TargetUsernames
-                using (var command = new MySqlCommand(query, connection))
+                string loggedInUsername = User.Identity.Name;
+
+                // Query users without permission
+                string selectUsersWithoutPermissionQuery = @"
+                    SELECT Username
+                    FROM Users
+                    WHERE Username != @LoggedInUsername
+                        AND NOT EXISTS (
+                            SELECT 1
+                            FROM Permissions
+                            WHERE OwnerUsername = @LoggedInUsername
+                                AND TargetUsername = Users.Username
+                        )";
+
+                // Query users with permission
+                string selectUsersWithPermissionQuery = @"
+                    SELECT Username
+                    FROM Users
+                    WHERE Username != @LoggedInUsername
+                        AND EXISTS (
+                            SELECT 1
+                            FROM Permissions
+                            WHERE OwnerUsername = @LoggedInUsername
+                                AND TargetUsername = Users.Username
+                        )";
+
+                UsersWithoutPermission = await GetUserOptionsAsync(selectUsersWithoutPermissionQuery, connection, loggedInUsername);
+                UsersWithPermission = await GetUserOptionsAsync(selectUsersWithPermissionQuery, connection, loggedInUsername);
+            }
+        }
+
+        private async Task<List<SelectListItem>> GetUserOptionsAsync(string query, MySqlConnection connection, string loggedInUsername)
+        {
+            var userOptions = new List<SelectListItem>();
+
+            using (var command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@LoggedInUsername", loggedInUsername);
+
+                using (var reader = await command.ExecuteReaderAsync())
                 {
-                    using (var reader = await command.ExecuteReaderAsync())
+                    while (reader.Read())
                     {
-                        while (await reader.ReadAsync())
+                        userOptions.Add(new SelectListItem
                         {
-                            var userPermission = new UserPermission
-                            {
-                                Username = reader.GetString(reader.GetOrdinal("TargetUsername")),
-                                HasPermission = true // Implement logic to check permission here
-                            };
-                            Users.Add(userPermission);
-                        }
+                            Value = reader["Username"].ToString(),
+                            Text = reader["Username"].ToString()
+                        });
                     }
                 }
             }
 
-            // Fetch users without permissions and add them to the list
-            List<string> usersWithPermissions = Users.Select(u => u.Username).ToList();
-            List<string> allUsers = await GetAllUsersAsync(); // Implement a method to fetch all users from the database
-            foreach (var user in allUsers)
-            {
-                if (!usersWithPermissions.Contains(user))
-                {
-                    Users.Add(new UserPermission { Username = user, HasPermission = false });
-                }
-            }
+            return userOptions;
         }
 
-        private async Task<List<string>> GetAllUsersAsync()
+        private async Task GrantPermissionAsync(string selectedUser)
         {
-            List<string> users = new List<string>();
-
             string connectionString = _configuration.GetConnectionString("DefaultConnection");
 
             using (var connection = new MySqlConnection(connectionString))
             {
                 await connection.OpenAsync();
 
-                string query = "SELECT DISTINCT Username FROM Users"; // Adjust the query based on your table schema
-                using (var command = new MySqlCommand(query, connection))
+                string loggedInUsername = User.Identity.Name;
+
+                string insertQuery = @"
+                    INSERT INTO Permissions (OwnerUsername, TargetUsername)
+                    VALUES (@OwnerUsername, @TargetUsername)";
+
+                using (var command = new MySqlCommand(insertQuery, connection))
                 {
-                    using (var reader = await command.ExecuteReaderAsync())
-                    {
-                        while (await reader.ReadAsync())
-                        {
-                            users.Add(reader.GetString(reader.GetOrdinal("Username")));
-                        }
-                    }
+                    command.Parameters.AddWithValue("@OwnerUsername", loggedInUsername);
+                    command.Parameters.AddWithValue("@TargetUsername", selectedUser);
+
+                    await command.ExecuteNonQueryAsync();
                 }
             }
-
-            return users;
         }
 
-        public class UserPermission
+        private async Task RevokePermissionAsync(string selectedUser)
         {
-            public string Username { get; set; }
-            public bool HasPermission { get; set; }
+            string connectionString = _configuration.GetConnectionString("DefaultConnection");
+
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                await connection.OpenAsync();
+
+                string loggedInUsername = User.Identity.Name;
+
+                string deleteQuery = @"
+                    DELETE FROM Permissions
+                    WHERE OwnerUsername = @OwnerUsername
+                        AND TargetUsername = @TargetUsername";
+
+                using (var command = new MySqlCommand(deleteQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@OwnerUsername", loggedInUsername);
+                    command.Parameters.AddWithValue("@TargetUsername", selectedUser);
+
+                    await command.ExecuteNonQueryAsync();
+                }
+            }
         }
     }
 }
