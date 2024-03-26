@@ -23,7 +23,6 @@ namespace Apkaweb.Pages
             {
                 await connection.OpenAsync();
 
-                // Check if the username already exists
                 string checkQuery = "SELECT COUNT(*) FROM Users WHERE Username = @Username";
                 using (var checkCommand = new MySqlCommand(checkQuery, connection))
                 {
@@ -31,14 +30,9 @@ namespace Apkaweb.Pages
                     long existingUserCount = (long)await checkCommand.ExecuteScalarAsync();
 
                     if (existingUserCount > 0)
-                    {
-                        // Username already exists, redirect back to the registration page
-                        // You can also display an error message here if you want
                         return RedirectToPage("/Register");
-                    }
                 }
 
-                // Insert the new user into the database
                 string insertQuery = "INSERT INTO Users (Username, Password) VALUES (@Username, @Password)";
                 using (var command = new MySqlCommand(insertQuery, connection))
                 {
@@ -47,17 +41,7 @@ namespace Apkaweb.Pages
 
                     int rowsAffected = await command.ExecuteNonQueryAsync();
 
-                    if (rowsAffected > 0)
-                    {
-                        // User successfully registered, redirect to the login page
-                        return RedirectToPage("/Index"); // Redirect to the login page
-                    }
-                    else
-                    {
-                        // Failed to register the user, handle accordingly (e.g., show error message)
-                        // You can redirect back to the registration page or display an error message
-                        return RedirectToPage("/Register"); // Redirect back to the registration page
-                    }
+                    return rowsAffected > 0 ? RedirectToPage("/Index") : RedirectToPage("/Register");
                 }
             }
         }

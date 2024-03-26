@@ -33,12 +33,11 @@
                     {
                         command.Parameters.AddWithValue("@Username", login);
                         command.Parameters.AddWithValue("@Password", password);
-
                         int count = Convert.ToInt32(await command.ExecuteScalarAsync());
 
                         if (count > 0)
                         {
-                            // Successful login, create claims
+                           
                             var claims = new[]
                             {
                                 new Claim(ClaimTypes.Name, login),
@@ -47,16 +46,14 @@
 
                             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                            // Sign in the user
+                            
                             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-                            // Redirect to option page
+                            
                             return RedirectToPage("/Options");
                         }
                     }
                 }
-
-                // Failed login, stay on the login page
                 return Page();
             }
         }

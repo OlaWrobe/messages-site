@@ -1,27 +1,25 @@
 ﻿@page
 @model Apkaweb.Pages.ShowMessagesModel
-@{
-}
 
 <h1>Chat</h1>
 
 <div class="chat-container">
     @foreach (var message in Model.Messages)
     {
-            <div class="message @(message.UserId == "x" ? "right" : "left")">
+            <div class="message @(message.UserId == User.Identity.Name ? "right" : "left")">
                 <p>@message.Content</p>
                 <p>UserId: @message.UserId</p>
 
             @if (Model.CanDeleteMessage(message.UserId, message.Id))
             {
-            <form method="post" asp-page-handler="Delete" asp-route-messageId="@message.Id">
-                <button type="submit" class="btn btn-danger">Delete</button>
-            </form>
+                        <form method="post" asp-page-handler="Delete" asp-route-messageId="@message.Id">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
             }
 
             @if (Model.CanEditMessage(message.UserId))
             {
-                        <form method="post" asp-page-handler="Edit" asp-route-MessageId="@message.Id">
+                        <form method="post" asp-page-handler="Edit" asp-route-messageId="@message.Id">
                             <textarea class="form-control" rows="3" name="NewContent">@message.Content</textarea>
                             <button type="submit" class="btn btn-primary">Edit</button>
                         </form>

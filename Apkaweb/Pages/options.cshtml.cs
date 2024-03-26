@@ -12,23 +12,12 @@ namespace Apkaweb.Pages
     {
         public async Task<IActionResult> OnPostLogoutAsync()
         {
-            // Sign out the user
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
-            // Redirect to the home page after logout
-            return RedirectToPage("/Index");
+            await HttpContext.SignOutAsync(); // Sign out the user
+            return RedirectToPage("/Index"); // Redirect to the home page after logout
         }
 
-        public async Task<IActionResult> OnPostShowMessagesAsync()
-        {
-            // Redirect to the ShowMessages page
-            return RedirectToPage("/ShowMessages");
-        }
+        public IActionResult OnPostShowMessagesAsync() => RedirectToPage("/ShowMessages"); // Redirect to ShowMessages page
 
-        public IActionResult OnPostPermissionsAsync()
-        {
-            // Redirect to the Permissions page
-            return RedirectToPage("/Permissions");
-        }
+        public IActionResult OnPostPermissionsAsync() => RedirectToPage("/Permissions"); // Redirect to Permissions page
     }
 }

@@ -9,53 +9,57 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Apkaweb
 build_property.RootNamespace = Apkaweb
-build_property.ProjectDir = C:\Users\mufff\source\repos\Apkaweb\Apkaweb\
+build_property.ProjectDir = C:\Users\mufff\Desktop\chetapka\messages-site\Apkaweb\
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\mufff\source\repos\Apkaweb\Apkaweb
+build_property.MSBuildProjectDirectory = C:\Users\mufff\Desktop\chetapka\messages-site\Apkaweb
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/mufff/source/repos/Apkaweb/Apkaweb/Pages/Error.cshtml]
+[C:/Users/mufff/Desktop/chetapka/messages-site/Apkaweb/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/mufff/source/repos/Apkaweb/Apkaweb/Pages/Index.cshtml]
+[C:/Users/mufff/Desktop/chetapka/messages-site/Apkaweb/Pages/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/mufff/source/repos/Apkaweb/Apkaweb/Pages/options.cshtml]
+[C:/Users/mufff/Desktop/chetapka/messages-site/Apkaweb/Pages/NewMessage.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTmV3TWVzc2FnZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/mufff/Desktop/chetapka/messages-site/Apkaweb/Pages/options.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcb3B0aW9ucy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/mufff/source/repos/Apkaweb/Apkaweb/Pages/Permissions.cshtml]
+[C:/Users/mufff/Desktop/chetapka/messages-site/Apkaweb/Pages/Permissions.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGVybWlzc2lvbnMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/mufff/source/repos/Apkaweb/Apkaweb/Pages/Privacy.cshtml]
+[C:/Users/mufff/Desktop/chetapka/messages-site/Apkaweb/Pages/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpdmFjeS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/mufff/source/repos/Apkaweb/Apkaweb/Pages/Register.cshtml]
+[C:/Users/mufff/Desktop/chetapka/messages-site/Apkaweb/Pages/Register.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVnaXN0ZXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/mufff/source/repos/Apkaweb/Apkaweb/Pages/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/mufff/Desktop/chetapka/messages-site/Apkaweb/Pages/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/mufff/source/repos/Apkaweb/Apkaweb/Pages/ShowMessages.cshtml]
+[C:/Users/mufff/Desktop/chetapka/messages-site/Apkaweb/Pages/ShowMessages.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hvd01lc3NhZ2VzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/mufff/source/repos/Apkaweb/Apkaweb/Pages/_ViewImports.cshtml]
+[C:/Users/mufff/Desktop/chetapka/messages-site/Apkaweb/Pages/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/mufff/source/repos/Apkaweb/Apkaweb/Pages/_ViewStart.cshtml]
+[C:/Users/mufff/Desktop/chetapka/messages-site/Apkaweb/Pages/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/mufff/source/repos/Apkaweb/Apkaweb/Pages/Shared/_Layout.cshtml]
+[C:/Users/mufff/Desktop/chetapka/messages-site/Apkaweb/Pages/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-bzcju2ohwg

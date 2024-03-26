@@ -2326,11 +2326,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\mufff\\source\\repos\\Apkaweb\\Apkaweb\\Apkaweb.csproj",
+      "projectUniqueName": "C:\\Users\\mufff\\Desktop\\chetapka\\messages-site\\Apkaweb\\Apkaweb.csproj",
       "projectName": "Apkaweb",
-      "projectPath": "C:\\Users\\mufff\\source\\repos\\Apkaweb\\Apkaweb\\Apkaweb.csproj",
+      "projectPath": "C:\\Users\\mufff\\Desktop\\chetapka\\messages-site\\Apkaweb\\Apkaweb.csproj",
       "packagesPath": "C:\\Users\\mufff\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\mufff\\source\\repos\\Apkaweb\\Apkaweb\\obj\\",
+      "outputPath": "C:\\Users\\mufff\\Desktop\\chetapka\\messages-site\\Apkaweb\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
