@@ -1,54 +1,64 @@
-﻿@page
-@model Apkaweb.Pages.OptionsModel
+@page
+@model Apkaweb.Pages.optionsModel
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Chats</title>
+    <title>Account page</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        .sample-chat {
-            font-size: 20px;
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
+
+        .btn-primary {
+            width: 600px;
+            height: 70px;
+            font-weight: bold;
+            font-size: 25px;
+        }
+
+        .btn-outline-primary {
+            width: 600px;
+        }
+
+        .btn-danger {
+            width: 300px;
+        }
+
+        .page-button {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .page-button {
+            margin-top: 50px;
+            text-align: center;
+        }
+
     </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h2>MENU</h2>
-        <table class="table">
-            <tr>
-                <td><p class="sample-chat">1. Wyloguj</p></td>
-                <td><form method="post"><button type="submit" class="btn btn-danger" asp-page-handler="Logout">Wyloguj</button></form></td>
-            </tr>
-            <tr>
-                <td><p class="sample-chat">2. Wyświetl wiadomości</p></td>
-                <td><form method="post"><button type="submit" class="btn btn-outline-primary" asp-page-handler="Options">Wybierz</button></form></td>
-            </tr>
-            <tr>
-                <td><p class="sample-chat">3. Napisz wiadomość</p></td>
-                <td><form method="post"><button type="submit" class="btn btn-outline-primary" asp-page-handler="NewMessage">Wybierz</button></form></td>
-            </tr>
-            <tr>
-                <td><p class="sample-chat">4. Usuń wiadomość</p></td>
-                <td><form method="post"><button type="submit" class="btn btn-outline-primary" asp-page-handler="Options">Wybierz</button></form></td>
-            </tr>
-            <tr>
-                <td><p class="sample-chat">5. Zarejestruj nowego użytkownika</p></td>
-                <td><form method="post"><button type="submit" class="btn btn-outline-primary" asp-page-handler="Options">Wybierz</button></form></td>
-            </tr>
-            <tr>
-                <td><p class="sample-chat">6. Modyfikuj wiadomość (tylko przez autora)</p></td>
-                <td><form method="post"><button type="submit" class="btn btn-outline-primary" asp-page-handler="Options">Wybierz</button></form></td>
-            </tr>
-            <tr>
-                <td><p class="sample-chat">7. Nadaj/odbierz uprawnienia do modyfikacji</p></td>
-                <td><form method="post"><button type="submit" class="btn btn-outline-primary" asp-page-handler="Options">Wybierz</button></form></td>
-            </tr>
-            <tr>
-                <td><p class="sample-chat">8. Modyfikuj wiadomość innego autora (jeśli masz uprawnienia)</p></td>
-                <td><form method="post"><button type="submit" class="btn btn-outline-primary" asp-page-handler="Options">Wybierz</button></form></td>
-            </tr>
-        </table>
+    <div class="form-group">
+        <h2>Menu</h2>
+        <form method="post">
+            <div class="page-button">
+                <button type="submit" class="btn btn-primary" asp-page-handler="ShowMessages">Join chat</button>
+            </div>
+        </form>
+        <form method="post">
+            <div class="page-button">
+                <button type="submit" class="btn btn-outline-primary" asp-page-handler="Permissions">Modify permissions</button>
+            </div>
+        </form>
+        <form method="post">
+            <div class="page-button">
+                <button type="submit" class="btn btn-danger" asp-page-handler="Logout">Log out</button>
+            </div>
+        </form>
+
     </div>
 </body>
 </html>
