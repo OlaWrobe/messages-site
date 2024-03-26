@@ -6,26 +6,28 @@
 <div class="chat-container">
     @foreach (var message in Model.Messages)
     {
-            <div class="message @(message.UserId == User.Identity.Name ? "right" : "left")">
-                <p>@message.Content</p>
-                <p>UserId: @message.UserId</p>
+        <div class="message @(message.UserId == User.Identity.Name ? "right" : "left")">
+            <p>@message.Content</p>
+            <p>UserId: @message.UserId</p>
 
-            @if (Model.CanDeleteMessage(message.UserId, message.Id))
+            @if (Model.CanDeleteOrEditMessage(User.Identity.Name, message.UserId, message.Id, "delete"))
             {
-                        <form method="post" asp-page-handler="Delete" asp-route-messageId="@message.Id">
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        </form>
+                    <form method="post" asp-page-handler="Delete" asp-route-messageId="@message.Id">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
             }
 
-            @if (Model.CanEditMessage(message.UserId))
+            @if (Model.CanDeleteOrEditMessage(User.Identity.Name, message.UserId, message.Id, "edit"))
             {
-                        <form method="post" asp-page-handler="Edit" asp-route-messageId="@message.Id">
-                            <textarea class="form-control" rows="3" name="NewContent">@message.Content</textarea>
-                            <button type="submit" class="btn btn-primary">Edit</button>
-                        </form>
+            <button type="button" class="btn btn-primary edit-btn">Edit</button>
+            <form method="post" class="edit-form" style="display: none;" asp-page-handler="Edit" asp-route-messageId="@message.Id">
+                <textarea class="form-control" rows="3" name="NewContent">@message.Content</textarea>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
             }
-            </div>
+        </div>
     }
+
 </div>
 
 <form method="post">
@@ -55,3 +57,16 @@
         background-color: #d0d0d0;
     }
 </style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const editButtons = document.querySelectorAll(".edit-btn");
+        editButtons.forEach(function (button) {
+            button.addEventListener("click", function () {
+                const form = this.nextElementSibling;
+                form.style.display = "block";
+                this.style.display = "none";
+            });
+        });
+    });
+</script>
