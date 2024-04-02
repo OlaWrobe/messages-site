@@ -31,17 +31,48 @@
             text-align: left;
         }
 
+        .edit-area {
+            max-width: 500px;
+            max-height: 120px;
+            width: 100%;
+            height: 80px;
+            padding: 10px;
+            margin-right: 5px; /* odstęp od przyciksu save */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: both;
+            overflow: auto;
+        }
+
         .flex-container {
             display: flex;
             margin-top: 5px;
         }
 
+        .flex-container2 {
+            display: flex;
+        }
+
+        /*.form-control {
+            max-height: 80px;
+            width: 100%;
+            height: 50px;
+            padding: 10px;
+            margin-right: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none;
+        }*/
+
+        /*.flex-container2 {
+            display: flex;
+        }*/
+
         .delete-btn {
             margin-right: 5px; /* odstęp między guzikami delete i edit */
         }
 
-        .btn-outline-primary,
-        .btn-primary {
+        .btn-outline-primary{
             padding: 3px;
         }
     </style>
@@ -54,7 +85,7 @@
         @foreach (var message in Model.Messages)
         {
             <div class="message @(message.UserId == User.Identity.Name ? "right" : "left")">
-                <p style="margin-bottom: 0;"><b>@message.UserId</b></p>
+                <p style="margin-bottom: 0; margin-left: 5px; margin-right: 5px; "><b>@message.UserId</b></p>
 
                 <div class="box">
                     <p style="margin-bottom: 0;">@message.Content</p>
@@ -71,8 +102,11 @@
                         {
                             <button type="button" class="btn btn-outline-primary edit-btn">Edit</button>
                             <form method="post" class="edit-form" style="display: none;" asp-page-handler="Edit" asp-route-messageId="@message.Id">
-                                <textarea class="form-control" rows="3" name="NewContent">@message.Content</textarea>
-                                <button type="submit" class="btn btn-primary">Save</button>
+                                <div class="flex-container2">
+                                    <textarea class="edit-area" name="NewContent">@message.Content</textarea>
+                                    <button style="padding: 3px;" type="submit" class="btn btn-primary">Save</button>
+                                </div>
+                                
                             </form>
                         }
                     </div>
@@ -82,10 +116,12 @@
     </div>
 
     <form method="post">
-        <div class="form-group">
-            <textarea class="form-control" id="messageInput" rows="3" asp-for="NewMessage"></textarea>
+        <div class="flex-send-message">
+            <div>
+                <textarea class="form-control" id="messageInput" rows="3" asp-for="NewMessage"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Send</button>
         </div>
-        <button type="submit" class="btn btn-primary">Send</button>
     </form>
 </body>
 </html>
