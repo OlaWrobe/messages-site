@@ -8,45 +8,44 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         .message {
-            padding: 10px;
-            margin-bottom: 10px;
+            padding: 5px; /* pole otaczające nazwę użytkownika i box z wiadomością */
             clear: both;
         }
 
         .right {
             float: right;
+            text-align: right;
         }
 
         .left {
             float: left;
+            text-align: left;
         }
+
         .box {
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
+            padding: 10px; /* pole otaczające treść wiadomości w boxie */
+            border-radius: 5px; /* zaoblenie boxa */
             border: 1px solid #ccc;
             background-color: #f9f9f9;
-            max-width: 500px; /* Example max-width */
-            min-width: 140px; /* Example min-width */
+            max-width: 800px;
+            text-align: left;
         }
 
         .flex-container {
             display: flex;
-            justify-content: right;
-        }
-
-        .flex-container > div {
-            margin: 10px;
-            padding: 10px;
+            margin-top: 5px;
         }
 
         .delete-btn {
-            margin-right: 5px;
+            margin-right: 5px; /* odstęp między guzikami delete i edit */
         }
 
+        .btn-outline-primary,
+        .btn-primary {
+            padding: 3px;
+        }
     </style>
 </head>
-
 <body>
 
     <h1>Chat</h1>
@@ -55,22 +54,22 @@
         @foreach (var message in Model.Messages)
         {
             <div class="message @(message.UserId == User.Identity.Name ? "right" : "left")">
-                <p>@message.UserId</p>
+                <p style="margin-bottom: 0;"><b>@message.UserId</b></p>
 
                 <div class="box">
-                    <p>@message.Content</p>
-                
+                    <p style="margin-bottom: 0;">@message.Content</p>
+
                     <div class="flex-container">
                         @if (Model.CanDeleteOrEditMessage(User.Identity.Name, message.UserId, message.Id, "delete"))
                         {
                             <form method="post" asp-page-handler="Delete" asp-route-messageId="@message.Id">
-                                        <button type="submit" class="btn btn-outline-primary delete-btn">Delete</button>
+                                <button type="submit" class="btn btn-outline-primary delete-btn">Delete</button>
                             </form>
                         }
 
                         @if (Model.CanDeleteOrEditMessage(User.Identity.Name, message.UserId, message.Id, "edit"))
                         {
-                                    <button type="button" class="btn btn-outline-primary edit-btn">Edit</button>
+                            <button type="button" class="btn btn-outline-primary edit-btn">Edit</button>
                             <form method="post" class="edit-form" style="display: none;" asp-page-handler="Edit" asp-route-messageId="@message.Id">
                                 <textarea class="form-control" rows="3" name="NewContent">@message.Content</textarea>
                                 <button type="submit" class="btn btn-primary">Save</button>
@@ -79,7 +78,7 @@
                     </div>
                 </div>
             </div>
-         }
+        }
     </div>
 
     <form method="post">
