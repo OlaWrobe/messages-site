@@ -1,62 +1,95 @@
-﻿@page
+@page
 @model Apkaweb.Pages.ShowMessagesModel
 
-<h1>Chat</h1>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .message {
+            padding: 10px;
+            margin-bottom: 10px;
+            clear: both;
+        }
 
-<div class="chat-container">
-    @foreach (var message in Model.Messages)
-    {
-        <div class="message @(message.UserId == User.Identity.Name ? "right" : "left")">
-            <p>@message.Content</p>
-            <p>UserId: @message.UserId</p>
+        .right {
+            float: right;
+        }
 
-            @if (Model.CanDeleteOrEditMessage(User.Identity.Name, message.UserId, message.Id, "delete"))
-            {
-                    <form method="post" asp-page-handler="Delete" asp-route-messageId="@message.Id">
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
-            }
+        .left {
+            float: left;
+        }
+        .box {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            max-width: 500px; /* Example max-width */
+            min-width: 140px; /* Example min-width */
+        }
 
-            @if (Model.CanDeleteOrEditMessage(User.Identity.Name, message.UserId, message.Id, "edit"))
-            {
-            <button type="button" class="btn btn-primary edit-btn">Edit</button>
-            <form method="post" class="edit-form" style="display: none;" asp-page-handler="Edit" asp-route-messageId="@message.Id">
-                <textarea class="form-control" rows="3" name="NewContent">@message.Content</textarea>
-                <button type="submit" class="btn btn-primary">Save</button>
-            </form>
-            }
-        </div>
-    }
+        .flex-container {
+            display: flex;
+            justify-content: right;
+        }
 
-</div>
+        .flex-container > div {
+            margin: 10px;
+            padding: 10px;
+        }
 
-<form method="post">
-    <div class="form-group">
-        <textarea class="form-control" id="messageInput" rows="3" asp-for="NewMessage"></textarea>
+        .delete-btn {
+            margin-right: 5px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <h1>Chat</h1>
+
+    <div class="chat-container">
+        @foreach (var message in Model.Messages)
+        {
+            <div class="message @(message.UserId == User.Identity.Name ? "right" : "left")">
+                <p>@message.UserId</p>
+
+                <div class="box">
+                    <p>@message.Content</p>
+                
+                    <div class="flex-container">
+                        @if (Model.CanDeleteOrEditMessage(User.Identity.Name, message.UserId, message.Id, "delete"))
+                        {
+                            <form method="post" asp-page-handler="Delete" asp-route-messageId="@message.Id">
+                                        <button type="submit" class="btn btn-outline-primary delete-btn">Delete</button>
+                            </form>
+                        }
+
+                        @if (Model.CanDeleteOrEditMessage(User.Identity.Name, message.UserId, message.Id, "edit"))
+                        {
+                                    <button type="button" class="btn btn-outline-primary edit-btn">Edit</button>
+                            <form method="post" class="edit-form" style="display: none;" asp-page-handler="Edit" asp-route-messageId="@message.Id">
+                                <textarea class="form-control" rows="3" name="NewContent">@message.Content</textarea>
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </form>
+                        }
+                    </div>
+                </div>
+            </div>
+         }
     </div>
-    <button type="submit" class="btn btn-primary">Send</button>
-</form>
 
-<style>
-    .message {
-        padding: 10px;
-        margin-bottom: 10px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        background-color: #f9f9f9;
-        clear: both;
-    }
-
-    .right {
-        float: right;
-        background-color: #e0e0e0;
-    }
-
-    .left {
-        float: left;
-        background-color: #d0d0d0;
-    }
-</style>
+    <form method="post">
+        <div class="form-group">
+            <textarea class="form-control" id="messageInput" rows="3" asp-for="NewMessage"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Send</button>
+    </form>
+</body>
+</html>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
