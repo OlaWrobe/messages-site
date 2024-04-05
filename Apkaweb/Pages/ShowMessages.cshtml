@@ -75,7 +75,7 @@
             padding: 5px;
         }
 
-        .delete-btn2 {
+        .delete-btn {
             margin-left: 5px;
             flex-grow: 1;
         }
@@ -105,12 +105,22 @@
         .btn-outline-primary {
             padding: 3px;
         }
+
+        .btn-danger {
+            margin-right: 5px;
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 20px;
+        }
     </style>
 </head>
 
 <body>
-    <h1>Chat</h1>
-
+    <div class="d-flex justify-content-between">
+        <h1>Chat</h1>
+        <a href="/options" class="btn btn-danger"><b>Leave chat</b></a>
+    </div>
+    
     <div class="main-container">
         <div>
             @foreach (var message in Model.Messages)
@@ -138,7 +148,7 @@
                             <div class="flex-container2">
                                 <div class="stretch"></div>
                                 <form method="post" asp-page-handler="Delete" asp-route-messageId="@message.Id" class="delete-btn-container">
-                                    <button type="submit" class="btn btn-outline-primary delete-btn2">Delete</button>
+                                    <button type="submit" class="btn btn-outline-primary delete-btn">Delete</button>
                                 </form>
                             </div>
                         </div>
@@ -154,6 +164,10 @@
                 <button type="submit" class="btn btn-primary">Send</button>
             </div>
         </form>
+    </div>
+
+    <div class="d-flex justify-content-end">
+        <a href="/options" class="btn btn-danger"><b>Leave chat</b></a>
     </div>
 </body>
 </html>
