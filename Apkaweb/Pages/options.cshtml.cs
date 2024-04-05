@@ -17,5 +17,7 @@ namespace Apkaweb.Pages
         public IActionResult OnPostShowMessagesAsync() => RedirectToPage("/ShowMessages");
 
         public IActionResult OnPostPermissionsAsync() => RedirectToPage("/Permissions");
+
+        public IActionResult OnPostUserPageAsync() => RedirectToPage("/User");
     }
 }
