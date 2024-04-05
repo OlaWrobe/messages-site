@@ -1,16 +1,75 @@
-﻿@page
+@page
 @model PermissionsModel
 
-<form method="post">
-    <div>
-        <label for="usersWithoutPermission">Users without Permission:</label>
-        <select asp-for="SelectedUserWithoutPermission" asp-items="Model.UsersWithoutPermission"></select>
-        <button type="submit" asp-page-handler="GrantPermission">Grant Permission</button>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .btn-danger {
+            margin-right: 5px;
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 20px;
+        }
+
+        .box {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            max-width: 800px;
+            text-align: left;
+        }
+
+        .flex-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .flex-container2 {
+            display: flex;
+        }
+
+        p {
+            font-size: 20px;
+            margin-bottom: -1px;
+        }
+
+        select {
+            width: 680px;
+        }
+
+        .btn {
+            width: 100px;
+            align-content: center;
+            margin-left: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="d-flex justify-content-between">
+        <h1>Permissions</h1>
+        <a href="/options" class="btn btn-danger"><b>Go back</b></a>
     </div>
-    <br />
-    <div>
-        <label for="usersWithPermission">Users with Permission:</label>
-        <select asp-for="SelectedUserWithPermission" asp-items="Model.UsersWithPermission"></select>
-        <button type="submit" asp-page-handler="RevokePermission">Revoke Permission</button>
+    <div class="box">
+        <form method="post">
+            <div class="flex-container">
+                <p for="usersWithoutPermission"><b>Grant permissions:</b></p>
+                <div class="flex-container2">
+                    <select asp-for="SelectedUserWithoutPermission" asp-items="Model.UsersWithoutPermission"></select>
+                    <button class="btn btn-outline-primary" type="submit" asp-page-handler="GrantPermission"><b>Grant</b></button>
+                </div>
+                <br />
+                <p for="usersWithPermission"><b>Revoke permissions:</b></p>
+                <div class="flex-container2">
+                    <select asp-for="SelectedUserWithPermission" asp-items="Model.UsersWithPermission"></select>
+                    <button class="btn btn-outline-danger" type="submit" asp-page-handler="RevokePermission"><b>Revoke</b></button>
+                </div>
+            </div>
+        </form>
     </div>
-</form>
+</body>
+</html>
