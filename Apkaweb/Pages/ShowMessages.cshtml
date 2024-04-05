@@ -75,14 +75,20 @@
             padding: 5px;
         }
 
-        .delete-btn {
-            margin-left: 5px; /* odstęp między guzikami delete i edit */
+        .delete-btn2 {
+            margin-left: 5px;
+            flex-grow: 1;
         }
 
-        .delete-btn2 {
-            margin-left: 5px; /* odstęp między guzikami delete i edit */
+        .stretch {
+            flex-grow: 1;
         }
-        
+
+        .delete-btn-container {
+            display: flex;
+            align-items: stretch;
+        }
+
         .save-btn {
             margin-bottom: 5px;
         }
@@ -96,13 +102,13 @@
                 flex-grow: 1;
             }
 
-        .btn-outline-primary{
+        .btn-outline-primary {
             padding: 3px;
         }
     </style>
 </head>
-<body>
 
+<body>
     <h1>Chat</h1>
 
     <div class="main-container">
@@ -126,19 +132,15 @@
                                             <button style="padding: 3px;" type="submit" class="btn btn-primary save-btn">Save</button>
                                             <button style="padding: 3px;" type="button" class="btn btn-secondary cancel-btn">Cancel</button>
                                         </div>
-                                        @if (Model.CanDeleteOrEditMessage(User.Identity.Name, message.UserId, message.Id, "delete"))
-                                        {
-                                            <form method="post" asp-page-handler="Delete" asp-route-messageId="@message.Id">
-                                                <button type="submit" class="btn btn-outline-primary delete-btn2">Delete</button>
-                                            </form>
-                                        }
                                     </div>
                                 </form>
                             }
-                            @if (Model.CanDeleteOrEditMessage(User.Identity.Name, message.UserId, message.Id, "delete"))
-                            {
-                                <button type="submit" class="btn btn-outline-primary delete-btn">Delete</button>
-                            }
+                            <div class="flex-container2">
+                                <div class="stretch"></div>
+                                <form method="post" asp-page-handler="Delete" asp-route-messageId="@message.Id" class="delete-btn-container">
+                                    <button type="submit" class="btn btn-outline-primary delete-btn2">Delete</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -166,11 +168,6 @@
                 form.dataset.originalContent = originalContent; // przechowywanie zawartości wiadomości (dla przycisku cancel)
                 form.style.display = "block";
                 this.style.display = "none";
-
-                const deleteButton = this.parentElement.querySelector(".delete-btn");
-                if (deleteButton) {
-                    deleteButton.style.display = "none";
-                }
             });
         });
 
