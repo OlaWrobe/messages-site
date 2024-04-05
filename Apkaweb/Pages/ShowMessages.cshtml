@@ -145,12 +145,15 @@
                                     </div>
                                 </form>
                             }
-                            <div class="flex-container2">
-                                <div class="stretch"></div>
-                                <form method="post" asp-page-handler="Delete" asp-route-messageId="@message.Id" class="delete-btn-container">
-                                    <button type="submit" class="btn btn-outline-primary delete-btn">Delete</button>
-                                </form>
-                            </div>
+                            @if (Model.CanDeleteOrEditMessage(User.Identity.Name, message.UserId, message.Id, "delete"))
+                            {
+                                <div class="flex-container2">
+                                    <div class="stretch"></div>
+                                    <form method="post" asp-page-handler="Delete" asp-route-messageId="@message.Id" class="delete-btn-container">
+                                        <button type="submit" class="btn btn-outline-primary delete-btn">Delete</button>
+                                    </form>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -164,10 +167,6 @@
                 <button type="submit" class="btn btn-primary">Send</button>
             </div>
         </form>
-    </div>
-
-    <div class="d-flex justify-content-end">
-        <a href="/options" class="btn btn-danger"><b>Leave chat</b></a>
     </div>
 </body>
 </html>
