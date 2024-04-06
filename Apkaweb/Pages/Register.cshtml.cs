@@ -1,8 +1,11 @@
 using Apkaweb.models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace Apkaweb.Pages
 {
@@ -16,6 +19,7 @@ namespace Apkaweb.Pages
         }
         public List<SecurityQuestion> SecurityQuestions { get; set; }
 
+        // Handle GET requests
         public async Task<IActionResult> OnGetAsync()
         {
             try
@@ -43,10 +47,11 @@ namespace Apkaweb.Pages
                         }
                     }
                 }
+
                 return Page();
             }
             catch (Exception ex)
-            {
+            { 
                 return RedirectToPage("/Error");
             }
         }
