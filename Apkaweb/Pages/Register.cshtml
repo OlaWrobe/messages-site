@@ -71,7 +71,6 @@
             max-width: 470px;
             height: 68px;
             position: relative;
-
         }
 
         .close {
@@ -104,8 +103,8 @@
             </div>
             <div class="form-input">
                 <label for="securityQuestion">Security Question:</label>
-                <select class="form-control" id="securityQuestion" name="SecurityQuestionId">
-                    <option>Select a security question</option>
+                <select class="form-control" id="securityQuestion" name="SecurityQuestionId" required>
+                    <option disabled selected value="">Select a security question</option>
                     @foreach (var question in Model.SecurityQuestions)
                     {
                         <option value="@question.Id">@question.QuestionText</option>
