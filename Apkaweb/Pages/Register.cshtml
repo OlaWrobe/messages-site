@@ -46,24 +46,33 @@
                 text-align: center;
             }
 
-        .modal {
+        select {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23333" width="18px" height="18px"><path d="M7 10l5 5 5-5z" /></svg>');
+            background-repeat: no-repeat;
+            background-position: right center;
+        }
+
+        .popup {
             display: none;
             position: fixed;
-            z-index: 1;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
             background-color: rgba(0,0,0,0.4);
+            z-index: 9999;
         }
 
-        .modal-content {
+        .popup-content {
             background-color: #fefefe;
             margin: 15% auto;
             padding: 20px;
             border: 1px solid #888;
             width: 80%;
+            max-width: 470px;
+            height: 68px;
+            position: relative;
+
         }
 
         .close {
@@ -71,6 +80,7 @@
             float: right;
             font-size: 28px;
             font-weight: bold;
+            cursor: pointer;
         }
 
             .close:hover,
@@ -96,7 +106,7 @@
             <div class="form-input">
                 <label for="securityQuestion">Security Question:</label>
                 <select class="form-control" id="securityQuestion" name="SecurityQuestionId">
-                    <option value="">Select a security question</option>
+                    <option>Select a security question</option>
                     @foreach (var question in Model.SecurityQuestions)
                     {
                         <option value="@question.Id">@question.QuestionText</option>
@@ -119,18 +129,17 @@
             </div>
         </div>
     </div>
-
-    <div id="myModal" class="modal">
-        <div class="modal-content">
+    <div id="popup" class="popup">
+        <div class="popup-content">
             <span class="close">&times;</span>
             <p>User already exists! Please choose a different username.</p>
         </div>
-    </div>   
+    </div>
 </body>
 </html>
 
 <script>
-    var modal = document.getElementById("myModal");
+    var modal = document.getElementById("popup");
 
     var span = document.getElementsByClassName("close")[0];
 
