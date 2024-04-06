@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model UserModel
 @{
     ViewData["Title"] = "User";
@@ -10,11 +10,18 @@
     <p>Username: @Model.Username</p>
     <p>Password: @Model.Password</p>
     <p>Failed Login Attempts: @Model.FailedLoginAttempts</p>
-    <p>Is Blocked: @Model.IsBlockEnabled</p>
+        @if (Model.IsBlockEnabled == 1)
+        {
+            <p>Is Blocked: true</p>
+        }
+        else
+        {
+            <p>Is Blocked: false</p>
+        }
+
     <p>Number of Attempts: @Model.NumberOfAttempts</p>
     <p>Failed Attempt Date: @Model.FailedAttemptDate.ToString("yyyy-MM-dd HH:mm:ss")</p>
     <p>Success Attempt Date: @Model.SuccesAttemptDate.ToString("yyyy-MM-dd HH:mm:ss")</p>
-    <p>Attempts before succes: @Model.PreviousAttempts</p>
 </div>
 
 <form method="post">
@@ -22,11 +29,11 @@
     <button type="submit" class="btn btn-primary" asp-page-handler="ToggleBlock">
         @if (Model.IsBlockEnabled == 1)
         {
-            <span>Disable Account</span>
+            <span>Wyłącz blokowanie konta</span>
         }
         else
         {
-            <span>Enable Account</span>
+            <span>Włącz blokowanie konta</span>
         }
     </button>
 </form>
