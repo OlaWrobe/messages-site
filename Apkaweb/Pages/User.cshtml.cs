@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MySql.Data.MySqlClient;
+using System;
+using System.ComponentModel;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace Apkaweb.Pages
 {
@@ -20,6 +23,9 @@ namespace Apkaweb.Pages
         public int FailedLoginAttempts { get; set; }
         public int IsBlockEnabled { get; set; }
         public int NumberOfAttempts { get; set; }
+        public DateTime FailedAttemptDate { get; set; }
+        public DateTime SuccesAttemptDate { get; set; }
+        public int PreviousAttempts { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -30,7 +36,7 @@ namespace Apkaweb.Pages
             {
                 await connection.OpenAsync();
 
-                string query = "SELECT id, Username, Password, FailedLoginAttempts, IsBlockEnabled, NumberOfAttempts FROM Users WHERE Username = @Username";
+                string query = "SELECT id, Username, Password, FailedLoginAttempts, IsBlockEnabled, NumberOfAttempts, FailedAttemptDate, SuccesAttemptDate,PreviousAttempts FROM Users WHERE Username = @Username";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Username", loggedInUsername);
@@ -44,6 +50,9 @@ namespace Apkaweb.Pages
                             FailedLoginAttempts = reader.GetInt32("FailedLoginAttempts");
                             IsBlockEnabled = reader.GetInt32("IsBlockEnabled");
                             NumberOfAttempts = reader.GetInt32("NumberOfAttempts");
+                            FailedAttemptDate = reader.GetDateTime("FailedAttemptDate");
+                            SuccesAttemptDate = reader.GetDateTime("SuccesAttemptDate");
+                            PreviousAttempts = reader.GetInt32("PreviousAttempts");
                         }
                         else
                         {
