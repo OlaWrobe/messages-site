@@ -74,7 +74,7 @@ namespace Apkaweb.Pages
                     if (existingUserCount > 0)
                         return RedirectToPage("/Register");
                 }
-                DateTime teraz = DateTime.Now;
+                DateTime teraz = new DateTime(2000, 1, 1, 0, 0, 0);
                 string insertQuery = "INSERT INTO Users (Username, Password,FailedLoginAttempts,IsBlockEnabled,NumberOfAttempts,QuestionId,answer, " +
                     "FailedAttemptDate, SuccesAttemptDate, LockoutEndDate, PreviousAttempts) VALUES (@Username, " +
                     "@Password,0,0,0,@SelectedQuestionId,@Answer, @SuccesAttemptDate, @FailedAttemptDate, @LockoutEndDate, 0)";
