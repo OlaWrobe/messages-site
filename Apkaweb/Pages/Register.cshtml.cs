@@ -43,12 +43,10 @@ namespace Apkaweb.Pages
                         }
                     }
                 }
-
                 return Page();
             }
             catch (Exception ex)
             {
-                // Log or handle the exception
                 return RedirectToPage("/Error");
             }
         }
