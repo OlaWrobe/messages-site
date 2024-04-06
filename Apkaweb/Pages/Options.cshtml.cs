@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace Apkaweb.Pages
 {
     [Authorize] // autoryzacja
-    public class optionsModel : PageModel
+    public class OptionsModel : PageModel
     {
         public async Task<IActionResult> OnPostLogoutAsync()
         {
