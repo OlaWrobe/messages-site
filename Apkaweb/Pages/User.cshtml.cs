@@ -1,11 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
-using System;
 using System.Data;
-using System.Threading.Tasks;
-using static Mysqlx.Expect.Open.Types;
 
 namespace Apkaweb.Pages
 {
@@ -85,7 +81,6 @@ namespace Apkaweb.Pages
         }
 
         public async Task<IActionResult> OnPostToggleBlockAsync(int userId)
-
         {
             try
             {
