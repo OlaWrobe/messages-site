@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\mufff\\Desktop\\chetapka\\messages-site\\Apkaweb\\Apkaweb.csproj": {}
+    "C:\\Users\\mufff\\Desktop\\messages-site-main\\Apkaweb\\Apkaweb.csproj": {}
   },
   "projects": {
-    "C:\\Users\\mufff\\Desktop\\chetapka\\messages-site\\Apkaweb\\Apkaweb.csproj": {
+    "C:\\Users\\mufff\\Desktop\\messages-site-main\\Apkaweb\\Apkaweb.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\mufff\\Desktop\\chetapka\\messages-site\\Apkaweb\\Apkaweb.csproj",
+        "projectUniqueName": "C:\\Users\\mufff\\Desktop\\messages-site-main\\Apkaweb\\Apkaweb.csproj",
         "projectName": "Apkaweb",
-        "projectPath": "C:\\Users\\mufff\\Desktop\\chetapka\\messages-site\\Apkaweb\\Apkaweb.csproj",
+        "projectPath": "C:\\Users\\mufff\\Desktop\\messages-site-main\\Apkaweb\\Apkaweb.csproj",
         "packagesPath": "C:\\Users\\mufff\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\mufff\\Desktop\\chetapka\\messages-site\\Apkaweb\\obj\\",
+        "outputPath": "C:\\Users\\mufff\\Desktop\\messages-site-main\\Apkaweb\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

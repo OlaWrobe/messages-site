@@ -1,11 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using System;
+using System.ComponentModel;
 using System.Data;
 using System.Threading.Tasks;
-using static Mysqlx.Expect.Open.Types;
 
 namespace Apkaweb.Pages
 {
@@ -24,10 +23,12 @@ namespace Apkaweb.Pages
         public int FailedLoginAttempts { get; set; }
         public int IsBlockEnabled { get; set; }
         public int NumberOfAttempts { get; set; }
+        public DateTime FailedAttemptDate { get; set; }
+        public DateTime SuccesAttemptDate { get; set; }
+        public int PreviousAttempts { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {
-            // Retrieve the logged-in user's information from the database
             string loggedInUsername = HttpContext.User.Identity.Name;
 
             string connectionString = _configuration.GetConnectionString("DefaultConnection");
@@ -35,8 +36,7 @@ namespace Apkaweb.Pages
             {
                 await connection.OpenAsync();
 
-                // Assuming you have a Users table with columns: id, Username, Password, FailedLoginAttempts, IsBlockEnabled, NumberOfAttempts
-                string query = "SELECT id, Username, Password, FailedLoginAttempts, IsBlockEnabled, NumberOfAttempts FROM Users WHERE Username = @Username";
+                string query = "SELECT id, Username, Password, FailedLoginAttempts, IsBlockEnabled, NumberOfAttempts, FailedAttemptDate, SuccesAttemptDate,PreviousAttempts FROM Users WHERE Username = @Username";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Username", loggedInUsername);
@@ -50,23 +50,24 @@ namespace Apkaweb.Pages
                             FailedLoginAttempts = reader.GetInt32("FailedLoginAttempts");
                             IsBlockEnabled = reader.GetInt32("IsBlockEnabled");
                             NumberOfAttempts = reader.GetInt32("NumberOfAttempts");
+                            FailedAttemptDate = reader.GetDateTime("FailedAttemptDate");
+                            SuccesAttemptDate = reader.GetDateTime("SuccesAttemptDate");
+                            PreviousAttempts = reader.GetInt32("PreviousAttempts");
                         }
                         else
                         {
-                            // Handle the case where the user is not found
                             return RedirectToPage("/Error");
                         }
                     }
                 }
             }
-
             return Page();
         }
+
         public async Task<IActionResult> OnPostSetNumberOfAttemptsAsync(int userId, int numberOfAttempts)
         {
             try
             {
-                // Update the NumberOfAttempts property in the database
                 string connectionString = _configuration.GetConnectionString("DefaultConnection");
                 using (var connection = new MySqlConnection(connectionString))
                 {
@@ -75,30 +76,23 @@ namespace Apkaweb.Pages
                     string query = "UPDATE Users SET NumberOfAttempts = @NumberOfAttempts WHERE id = @UserId";
                     using (var command = new MySqlCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@UserId", userId); // Use the provided user ID
+                        command.Parameters.AddWithValue("@UserId", userId);
                         command.Parameters.AddWithValue("@NumberOfAttempts", numberOfAttempts);
                         await command.ExecuteNonQueryAsync();
                     }
                 }
-
-                // Redirect back to the same page after setting the number of attempts
                 return RedirectToPage("/User");
             }
             catch (Exception ex)
             {
-                // Log the exception or handle it appropriately
-                // For simplicity, let's return an error page
                 return RedirectToPage("/Error");
             }
         }
-        public async Task<IActionResult> OnPostToggleBlockAsync(int userId)
 
+        public async Task<IActionResult> OnPostToggleBlockAsync(int userId)
         {
             try
             {
-                
-
-                // Update the IsBlockEnabled property in the database
                 string connectionString = _configuration.GetConnectionString("DefaultConnection");
                 using (var connection = new MySqlConnection(connectionString))
                 {
@@ -108,25 +102,17 @@ namespace Apkaweb.Pages
 
                     using (var command = new MySqlCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@UserId", userId); // Use the provided user ID
+                        command.Parameters.AddWithValue("@UserId", userId);
                         command.Parameters.AddWithValue("@IsBlockEnabled", IsBlockEnabled);
                         await command.ExecuteNonQueryAsync();
                     }
                 }
-
-                // Redirect back to the same page after processing the form submission
                 return RedirectToPage("/User");
             }
             catch (Exception ex)
             {
-                // Log the exception or handle it appropriately
-                // For simplicity, let's return an error page
                 return RedirectToPage("/Error");
             }
-        
         }
-
     }
-
 }
-

@@ -1,5 +1,5 @@
 @page
-@model Apkaweb.Pages.optionsModel
+@model Apkaweb.Pages.OptionsModel
 
 <!DOCTYPE html>
 <html>
@@ -53,9 +53,9 @@
                 <button type="submit" class="btn btn-outline-primary" asp-page-handler="Permissions">Modify permissions</button>
             </div>
         </form>
-         <form method="post">
+        <form method="post">
             <div class="page-button">
-                <button type="submit" class="btn btn-outline-primary" asp-page-handler="UserPage">User page</button>
+                <button type="submit" class="btn btn-outline-primary" asp-page-handler="UserPage">My account</button>
             </div>
         </form>
         <form method="post">
@@ -63,7 +63,6 @@
                 <button type="submit" class="btn btn-danger" asp-page-handler="Logout">Log out</button>
             </div>
         </form>
-
     </div>
 </body>
 </html>

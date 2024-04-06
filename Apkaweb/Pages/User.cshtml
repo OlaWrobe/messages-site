@@ -12,6 +12,9 @@
     <p>Failed Login Attempts: @Model.FailedLoginAttempts</p>
     <p>Is Blocked: @Model.IsBlockEnabled</p>
     <p>Number of Attempts: @Model.NumberOfAttempts</p>
+    <p>Failed Attempt Date: @Model.FailedAttemptDate.ToString("yyyy-MM-dd HH:mm:ss")</p>
+    <p>Success Attempt Date: @Model.SuccesAttemptDate.ToString("yyyy-MM-dd HH:mm:ss")</p>
+    <p>Attempts before succes: @Model.PreviousAttempts</p>
 </div>
 
 <form method="post">

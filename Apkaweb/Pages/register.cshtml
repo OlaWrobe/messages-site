@@ -1,7 +1,6 @@
 @page
 @model Apkaweb.Pages.RegisterModel
-@{
-}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -46,24 +45,33 @@
                 text-align: center;
             }
 
-        .modal {
+        select {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23333" width="18px" height="18px"><path d="M7 10l5 5 5-5z" /></svg>');
+            background-repeat: no-repeat;
+            background-position: right center;
+        }
+
+        .popup {
             display: none;
             position: fixed;
-            z-index: 1;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
             background-color: rgba(0,0,0,0.4);
+            z-index: 9999;
         }
 
-        .modal-content {
+        .popup-content {
             background-color: #fefefe;
             margin: 15% auto;
             padding: 20px;
             border: 1px solid #888;
             width: 80%;
+            max-width: 470px;
+            height: 68px;
+            position: relative;
+
         }
 
         .close {
@@ -71,6 +79,7 @@
             float: right;
             font-size: 28px;
             font-weight: bold;
+            cursor: pointer;
         }
 
             .close:hover,
@@ -94,17 +103,16 @@
                 <input type="password" class="form-control" id="passwordInput" name="Password" placeholder="Enter your password">
             </div>
             <div class="form-input">
-        <label for="securityQuestion">Security Question:</label>
-        <select class="form-control" id="securityQuestion" name="SecurityQuestionId">
-            <option value="">Select a security question</option>
-            @foreach (var question in Model.SecurityQuestions)
-            {
-                <option value="@question.Id">@question.QuestionText</option>
-            }
-        </select>
-        <!-- Add a hidden input field to store the selected question ID -->
-        <input type="hidden" id="selectedQuestionId" name="SelectedQuestionId" value="">
-    </div>
+                <label for="securityQuestion">Security Question:</label>
+                <select class="form-control" id="securityQuestion" name="SecurityQuestionId">
+                    <option>Select a security question</option>
+                    @foreach (var question in Model.SecurityQuestions)
+                    {
+                        <option value="@question.Id">@question.QuestionText</option>
+                    }
+                </select>
+                <input type="hidden" id="selectedQuestionId" name="SelectedQuestionId" value="">
+            </div>
             <div class="form-input">
                 <label for="answerInput">Answer:</label>
                 <input type="text" class="form-control" id="answerInput" name="Answer" placeholder="Enter your answer">
@@ -120,40 +128,31 @@
             </div>
         </div>
     </div>
-
-    <!-- Modal popup for user already exists warning -->
-    <div id="myModal" class="modal">
-        <div class="modal-content">
+    <div id="popup" class="popup">
+        <div class="popup-content">
             <span class="close">&times;</span>
             <p>User already exists! Please choose a different username.</p>
         </div>
     </div>
-
-    <!-- Script for modal popup -->
-    <script>
-        // Get the modal
-        var modal = document.getElementById("myModal");
-
-        // Get the <span> element that closes the modal
-        var span = document.getElementsByClassName("close")[0];
-
-        // When the user clicks on <span> (x), close the modal
-        span.onclick = function () {
-            modal.style.display = "none";
-        }
-         var dropdown = document.getElementById("securityQuestion");
-
-    // Add event listener for change event
-    dropdown.addEventListener("change", function() {
-        // Get the selected option
-        var selectedOption = dropdown.options[dropdown.selectedIndex];
-
-        // Get the value of the selected option (question ID)
-        var selectedQuestionId = selectedOption.value;
-
-        // Update the hidden input field with the selected question ID
-        document.getElementById("selectedQuestionId").value = selectedQuestionId;
-    });
-    </script>
 </body>
 </html>
+
+<script>
+    var modal = document.getElementById("popup");
+
+    var span = document.getElementsByClassName("close")[0];
+
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    var dropdown = document.getElementById("securityQuestion");
+
+    dropdown.addEventListener("change", function () {
+        var selectedOption = dropdown.options[dropdown.selectedIndex];
+
+        var selectedQuestionId = selectedOption.value;
+
+        document.getElementById("selectedQuestionId").value = selectedQuestionId;
+    });
+</script>

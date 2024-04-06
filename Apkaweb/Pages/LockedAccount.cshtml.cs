@@ -2,11 +2,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
-using System;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace Apkaweb.Pages
 {
@@ -26,7 +23,6 @@ namespace Apkaweb.Pages
         {
             Username = username;
 
-            // Fetch the security question from the database based on the user
             string connectionString = _configuration.GetConnectionString("DefaultConnection");
 
             using (var connection = new MySqlConnection(connectionString))
@@ -41,7 +37,6 @@ namespace Apkaweb.Pages
                     SecurityQuestion = (string)await command.ExecuteScalarAsync();
                 }
             }
-
             return Page();
         }
 
@@ -53,7 +48,6 @@ namespace Apkaweb.Pages
             {
                 await connection.OpenAsync();
 
-                // Perform the login attempt
                 string query = "SELECT COUNT(*) FROM Users WHERE Username = @Username AND Password = @Password AND Answer = @Answer";
                 using (var command = new MySqlCommand(query, connection))
                 {
@@ -64,15 +58,21 @@ namespace Apkaweb.Pages
 
                     if (count > 0)
                     {
-                        // Reset failed login attempts upon successful login
                         await ResetFailedLoginAttempts(connection, username);
+                        DateTime succesAttemptDate = DateTime.Now;
 
-                        // Authentication successful, create claims and sign in the user
+                        string updateQuery = "UPDATE Users SET SuccesAttemptDate = @SuccesAttemptDate WHERE Username = @Username";
+                        using (var updateCommand = new MySqlCommand(updateQuery, connection))
+                        {
+                            updateCommand.Parameters.AddWithValue("@SuccesAttemptDate", succesAttemptDate);
+                            updateCommand.Parameters.AddWithValue("@Username", username);
+                            await updateCommand.ExecuteNonQueryAsync();
+                        }
                         var claims = new[]
                         {
-                    new Claim(ClaimTypes.Name, username),
-                    new Claim(ClaimTypes.Role, "User")
-                };
+                            new Claim(ClaimTypes.Name, username),
+                            new Claim(ClaimTypes.Role, "User")
+                        };
 
                         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -82,17 +82,34 @@ namespace Apkaweb.Pages
                     }
                     else
                     {
+                        await IncrementFailedLoginAttempts(connection, username);
+
+                        DateTime failedAttemptDate = DateTime.Now;
+                        string updateQuery = "UPDATE Users SET FailedAttemptDate = @FailedAttemptDate WHERE Username = @Username";
+                        using (var updateCommand = new MySqlCommand(updateQuery, connection))
+                        {
+                            updateCommand.Parameters.AddWithValue("@FailedAttemptDate", failedAttemptDate);
+                            updateCommand.Parameters.AddWithValue("@Username", username);
+                            await updateCommand.ExecuteNonQueryAsync();
+                        }
                         return RedirectToPage("/Index");
                     }
                 }
             }
         }
-
-
-
+        private async Task IncrementFailedLoginAttempts(MySqlConnection connection, string username)
+        {
+            string query = "UPDATE Users SET FailedLoginAttempts = FailedLoginAttempts + 1 WHERE Username = @Username";
+            using (var command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@Username", username);
+                await command.ExecuteNonQueryAsync();
+            }
+        }
+        
         private async Task ResetFailedLoginAttempts(MySqlConnection connection, string username)
         {
-            string query = "UPDATE Users SET FailedLoginAttempts = 0 WHERE Username = @Username";
+            string query = "UPDATE Users SET PreviousAttempts = FailedLoginAttempts, FailedLoginAttempts = 0 WHERE Username = @Username"; ;
             using (var command = new MySqlCommand(query, connection))
             {
                 command.Parameters.AddWithValue("@Username", username);
