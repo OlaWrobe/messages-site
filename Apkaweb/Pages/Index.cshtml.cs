@@ -2,9 +2,13 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
+using System;
 using System.Data;
+using System.Data.SqlTypes;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Apkaweb.Pages
 {
@@ -19,6 +23,7 @@ namespace Apkaweb.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
+            // Check if the user is already authenticated
             if (User.Identity.IsAuthenticated)
             {
                 return RedirectToPage("/Options");
@@ -36,10 +41,10 @@ namespace Apkaweb.Pages
                 await connection.OpenAsync();
 
                 bool isBlocked = await IsAccountBlocked(connection, login);
-                bool isBlockEnabled = await IsBlockEnabled(connection, login);
+                
                 if (isBlocked)
                 {
-                    return RedirectToPage("/LockedAccount", new { username = login });
+                   return RedirectToPage("/LockedAccount", new { username = login });
                 }
 
                 string query = "SELECT COUNT(*) FROM Users WHERE Username = @Username AND Password = @Password";
@@ -51,17 +56,15 @@ namespace Apkaweb.Pages
 
                     if (count > 0)
                     {
-                        // resetowanie liczby nie udanych prób logowania przy poprawnym logowaniu
-                        if (isBlockEnabled)
-                        {
+                       
                             await ResetFailedLoginAttempts(connection, login);
-                        }
+                        
 
                         var claims = new[]
                         {
-                            new Claim(ClaimTypes.Name, login),
-                            new Claim(ClaimTypes.Role, "User")
-                        };
+                    new Claim(ClaimTypes.Name, login),
+                    new Claim(ClaimTypes.Role, "User")
+                };
 
                         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -71,10 +74,8 @@ namespace Apkaweb.Pages
                     }
                     else
                     {
-                        if (isBlockEnabled)
-                        {
                             await IncrementFailedLoginAttempts(connection, login);
-                        }
+                        
                     }
                 }
             }
@@ -91,6 +92,7 @@ namespace Apkaweb.Pages
             }
         }
 
+
         private async Task<bool> IsAccountBlocked(MySqlConnection connection, string username)
         {
             string query = "SELECT IsBlockEnabled, FailedLoginAttempts, NumberOfAttempts FROM Users WHERE Username = @Username";
@@ -106,8 +108,10 @@ namespace Apkaweb.Pages
                         int numberOfAttempts = reader.GetInt32("NumberOfAttempts");
                         return isBlockEnabled == 1 && (numberOfAttempts > 0 && failedLoginAttempts >= numberOfAttempts);
                     }
+                    
                     else
                     {
+                        // Handle the case where the user is not found
                         return false;
                     }
                 }
@@ -121,31 +125,6 @@ namespace Apkaweb.Pages
             {
                 command.Parameters.AddWithValue("@Username", username);
                 await command.ExecuteNonQueryAsync();
-            }
-        }
-
-        private async Task<bool> IsBlockEnabled(MySqlConnection connection, string username)
-        {
-            string query = "SELECT IsBlockEnabled FROM Users";
-            using (var command = new MySqlCommand(query, connection))
-            {
-                command.Parameters.AddWithValue("@Username", username);
-                using (var reader = await command.ExecuteReaderAsync())
-                {
-                    if (reader.Read())
-                    {
-                        int isBlockEnabled = reader.GetInt32("IsBlockEnabled");
-                        if (isBlockEnabled == 1)
-                        {
-                            return true;
-                        }
-                        else return false;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
             }
         }
     }
