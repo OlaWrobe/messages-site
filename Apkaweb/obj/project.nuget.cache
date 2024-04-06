@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "IafroFMeeth4kmEZhT4rqy8+Y3Zhrwdr26boOuSfTNQj+/LIPGkTQkxae6bp0Yrogzdf7d0QPginiqfaw6EaoQ==",
+  "dgSpecHash": "up8/4NZ7R5vs4ToZ97iKwdDXDuyvl1WDwz+tDbHaL9R23o3j0xRtfhrbURD6ORceuz3Ocxy8Kvz2y2Cyl4pDBQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\mufff\\Desktop\\chetapka\\messages-site\\Apkaweb\\Apkaweb.csproj",
+  "projectFilePath": "C:\\Users\\mufff\\Desktop\\messages-site-main\\Apkaweb\\Apkaweb.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\mufff\\.nuget\\packages\\bouncycastle.cryptography\\2.2.1\\bouncycastle.cryptography.2.2.1.nupkg.sha512",
     "C:\\Users\\mufff\\.nuget\\packages\\google.protobuf\\3.25.1\\google.protobuf.3.25.1.nupkg.sha512",
