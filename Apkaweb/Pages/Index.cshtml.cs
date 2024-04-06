@@ -2,13 +2,9 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
-using System;
 using System.Data;
-using System.Data.SqlTypes;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace Apkaweb.Pages
 {
@@ -41,10 +37,10 @@ namespace Apkaweb.Pages
                 await connection.OpenAsync();
 
                 bool isBlocked = await IsAccountBlocked(connection, login);
-                
+
                 if (isBlocked)
                 {
-                   return RedirectToPage("/LockedAccount", new { username = login });
+                    return RedirectToPage("/LockedAccount", new { username = login });
                 }
 
                 string query = "SELECT COUNT(*) FROM Users WHERE Username = @Username AND Password = @Password";
@@ -56,9 +52,9 @@ namespace Apkaweb.Pages
 
                     if (count > 0)
                     {
-                       
-                            await ResetFailedLoginAttempts(connection, login);
-                        
+
+                        await ResetFailedLoginAttempts(connection, login);
+
 
                         var claims = new[]
                         {
@@ -74,8 +70,8 @@ namespace Apkaweb.Pages
                     }
                     else
                     {
-                            await IncrementFailedLoginAttempts(connection, login);
-                        
+                        await IncrementFailedLoginAttempts(connection, login);
+
                     }
                 }
             }
@@ -108,7 +104,7 @@ namespace Apkaweb.Pages
                         int numberOfAttempts = reader.GetInt32("NumberOfAttempts");
                         return isBlockEnabled == 1 && (numberOfAttempts > 0 && failedLoginAttempts >= numberOfAttempts);
                     }
-                    
+
                     else
                     {
                         // Handle the case where the user is not found
