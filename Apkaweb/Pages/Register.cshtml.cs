@@ -51,7 +51,8 @@ namespace Apkaweb.Pages
                 return Page();
             }
             catch (Exception ex)
-            { 
+            {
+                // Log or handle the exception
                 return RedirectToPage("/Error");
             }
         }
@@ -73,14 +74,20 @@ namespace Apkaweb.Pages
                     if (existingUserCount > 0)
                         return RedirectToPage("/Register");
                 }
-
-                string insertQuery = "INSERT INTO Users (Username, Password,FailedLoginAttempts,IsBlockEnabled,NumberOfAttempts,QuestionId,answer) VALUES (@Username, @Password,0,0,0,@SelectedQuestionId,@Answer)";
+                DateTime teraz = DateTime.Now;
+                string insertQuery = "INSERT INTO Users (Username, Password,FailedLoginAttempts,IsBlockEnabled,NumberOfAttempts,QuestionId,answer, " +
+                    "FailedAttemptDate, SuccesAttemptDate, LockoutEndDate, PreviousAttempts) VALUES (@Username, " +
+                    "@Password,0,0,0,@SelectedQuestionId,@Answer, @SuccesAttemptDate, @FailedAttemptDate, @LockoutEndDate, 0)";
                 using (var command = new MySqlCommand(insertQuery, connection))
                 {
+                    
                     command.Parameters.AddWithValue("@Username", username);
                     command.Parameters.AddWithValue("@Password", password);
                     command.Parameters.AddWithValue("@Answer", answer);
                     command.Parameters.AddWithValue("@SelectedQuestionId", selectedQuestionId);
+                    command.Parameters.AddWithValue("@FailedAttemptDate", teraz);
+                    command.Parameters.AddWithValue("@SuccesAttemptDate", teraz);
+                    command.Parameters.AddWithValue("@LockoutEndDate", teraz);
 
                     int rowsAffected = await command.ExecuteNonQueryAsync();
 
