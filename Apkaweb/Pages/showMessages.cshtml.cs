@@ -33,29 +33,51 @@ namespace Apkaweb.Pages
 
         public async Task<IActionResult> OnPostDeleteAsync(int messageId)
         {
-            string connectionString = _configuration.GetConnectionString("DefaultConnection");
+            string loggedInUserId = User.Identity.Name; // Pobranie nazwy zalogowanego u¿ytkownika
 
+            // Pobranie w³aœciciela wiadomoœci
+            string ownerUserId;
+            string connectionString = _configuration.GetConnectionString("DefaultConnection");
             using (var connection = new MySqlConnection(connectionString))
             {
                 await connection.OpenAsync();
 
-                string deleteQuery = "DELETE FROM Messages WHERE Id = @MessageId";
-                using (var command = new MySqlCommand(deleteQuery, connection))
+                string selectOwnerQuery = "SELECT UserId FROM Messages WHERE Id = @MessageId";
+                using (var command = new MySqlCommand(selectOwnerQuery, connection))
                 {
                     command.Parameters.AddWithValue("@MessageId", messageId);
-                    await LoadMessagesAsync();
-                    return RedirectToPage("/ShowMessages");
+                    ownerUserId = await command.ExecuteScalarAsync() as string;
                 }
             }
+
+            // Sprawdzenie uprawnieñ do usuwania wiadomoœci
+            if (CanDeleteOrEditMessage(loggedInUserId, ownerUserId, messageId, "delete"))
+            {
+                // Usuniêcie wiadomoœci
+                using (var connection = new MySqlConnection(connectionString))
+                {
+                    await connection.OpenAsync();
+
+                    string deleteQuery = "DELETE FROM Messages WHERE Id = @MessageId";
+                    using (var command = new MySqlCommand(deleteQuery, connection))
+                    {
+                        command.Parameters.AddWithValue("@MessageId", messageId);
+                        await command.ExecuteNonQueryAsync();
+                    }
+                }
+            }
+            // Powrót do strony ShowMessages bez wzglêdu na wynik operacji usuwania
+            return RedirectToPage("/ShowMessages");
         }
 
         public bool CanDeleteOrEditMessage(string loggedInUserId, string ownerUserId, int messageId, string action)
         {
             if (loggedInUserId == ownerUserId)
             {
-                return true; 
+                return true; // Zalogowany u¿ytkownik mo¿e edytowaæ lub usuwaæ w³asne wiadomoœci
             }
 
+            // Sprawdzanie uprawnieñ na podstawie wpisów w tabeli Permissions
             string connectionString = _configuration.GetConnectionString("DefaultConnection");
 
             using (var connection = new MySqlConnection(connectionString))
@@ -75,7 +97,7 @@ namespace Apkaweb.Pages
 
                     int count = Convert.ToInt32(command.ExecuteScalar());
 
-                    return count > 0;
+                    return count > 0; // Zwraca true, jeœli istnieje wpis w tabeli Permissions, który umo¿liwia edycjê lub usuniêcie wiadomoœci
                 }
             }
         }
@@ -90,7 +112,7 @@ namespace Apkaweb.Pages
             {
                 await connection.OpenAsync();
 
-                string query = "SELECT * FROM Messages"; 
+                string query = "SELECT * FROM Messages";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     using (var reader = await command.ExecuteReaderAsync())
@@ -118,7 +140,7 @@ namespace Apkaweb.Pages
                 return Page();
             }
 
-            
+
             string userId = User.Identity.Name;
 
             string connectionString = _configuration.GetConnectionString("DefaultConnection");
@@ -144,39 +166,45 @@ namespace Apkaweb.Pages
 
         public async Task<IActionResult> OnPostEditAsync(int messageId, string newContent)
         {
-            var message = await GetMessageByIdAsync(messageId);
+            string loggedInUserId = User.Identity.Name; // Pobranie nazwy zalogowanego u¿ytkownika
 
-            if (message == null)
-            {
-                return NotFound(); 
-            }
-
-            if (!CanDeleteOrEditMessage(message.UserId, User.Identity.Name, messageId, "edit"))
-            {
-                return Forbid(); 
-            }
-
+            // Pobranie w³aœciciela wiadomoœci
+            string ownerUserId;
             string connectionString = _configuration.GetConnectionString("DefaultConnection");
-
             using (var connection = new MySqlConnection(connectionString))
             {
                 await connection.OpenAsync();
 
-                string updateQuery = "UPDATE Messages SET Content = @NewContent WHERE Id = @MessageId";
-                using (var command = new MySqlCommand(updateQuery, connection))
+                string selectOwnerQuery = "SELECT UserId FROM Messages WHERE Id = @MessageId";
+                using (var command = new MySqlCommand(selectOwnerQuery, connection))
                 {
-                    command.Parameters.AddWithValue("@NewContent", newContent);
                     command.Parameters.AddWithValue("@MessageId", messageId);
-
-                    await command.ExecuteNonQueryAsync();
-
-                   
-                    await LoadMessagesAsync();
-
-                    return RedirectToPage("/ShowMessages");
+                    ownerUserId = await command.ExecuteScalarAsync() as string;
                 }
             }
+
+            // Sprawdzenie uprawnieñ do edycji wiadomoœci
+            if (CanDeleteOrEditMessage(loggedInUserId, ownerUserId, messageId, "edit"))
+            {
+                // Aktualizacja treœci wiadomoœci
+                using (var connection = new MySqlConnection(connectionString))
+                {
+                    await connection.OpenAsync();
+
+                    string updateQuery = "UPDATE Messages SET Content = @NewContent WHERE Id = @MessageId";
+                    using (var command = new MySqlCommand(updateQuery, connection))
+                    {
+                        command.Parameters.AddWithValue("@NewContent", newContent);
+                        command.Parameters.AddWithValue("@MessageId", messageId);
+
+                        await command.ExecuteNonQueryAsync();
+                    }
+                }
+            }
+            // Powrót do strony ShowMessages bez wzglêdu na wynik operacji edycji
+            return RedirectToPage("/ShowMessages");
         }
+
 
 
 

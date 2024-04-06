@@ -93,6 +93,22 @@
                 <label for="passwordInput">Password:</label>
                 <input type="password" class="form-control" id="passwordInput" name="Password" placeholder="Enter your password">
             </div>
+            <div class="form-input">
+        <label for="securityQuestion">Security Question:</label>
+        <select class="form-control" id="securityQuestion" name="SecurityQuestionId">
+            <option value="">Select a security question</option>
+            @foreach (var question in Model.SecurityQuestions)
+            {
+                <option value="@question.Id">@question.QuestionText</option>
+            }
+        </select>
+        <!-- Add a hidden input field to store the selected question ID -->
+        <input type="hidden" id="selectedQuestionId" name="SelectedQuestionId" value="">
+    </div>
+            <div class="form-input">
+                <label for="answerInput">Answer:</label>
+                <input type="text" class="form-control" id="answerInput" name="Answer" placeholder="Enter your answer">
+            </div>
             <div class="page-button">
                 <button type="submit" class="btn btn-primary">Sign up</button>
             </div>
@@ -100,7 +116,7 @@
         <div class="box">
             <div>
                 <p>Already have an account?</p>
-                <a href="/Login" class="btn btn-secondary">Sign in</a>
+                <a href="/Index" class="btn btn-secondary">Sign in</a>
             </div>
         </div>
     </div>
@@ -125,7 +141,19 @@
         span.onclick = function () {
             modal.style.display = "none";
         }
+         var dropdown = document.getElementById("securityQuestion");
 
+    // Add event listener for change event
+    dropdown.addEventListener("change", function() {
+        // Get the selected option
+        var selectedOption = dropdown.options[dropdown.selectedIndex];
+
+        // Get the value of the selected option (question ID)
+        var selectedQuestionId = selectedOption.value;
+
+        // Update the hidden input field with the selected question ID
+        document.getElementById("selectedQuestionId").value = selectedQuestionId;
+    });
     </script>
 </body>
 </html>
