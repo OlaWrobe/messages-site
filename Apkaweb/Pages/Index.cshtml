@@ -47,12 +47,30 @@
             .box div {
                 text-align: center;
             }
+
+        .alert-danger {
+            width: 600px;
+            margin-top: -230px;
+            text-align: center;
+            display: none;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.5s ease;
+            opacity: 0;
+        }
+
+        .alert-show {
+            display: block;
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
     <div class="form-group">
         <h2>Login</h2>
-        <form method="post">
+        <form method="post" id="loginForm">
             <div class="form-input">
                 <label for="loginInput">Username:</label>
                 <input type="text" class="form-control" id="loginInput" name="Login" placeholder="Enter your username">
@@ -61,8 +79,11 @@
                 <label for="passwordInput">Password:</label>
                 <input type="password" class="form-control" id="passwordInput" name="Password" placeholder="Enter your password">
             </div>
+            <div class="alert alert-danger" role="alert" id="errorMessage">
+                Please fill in both username and password fields.
+            </div>
             <div class="page-button">
-                <button type="submit" class="btn btn-primary">Sign in</button>
+                <button type="button" class="btn btn-primary" id="signInBtn">Sign in</button>
             </div>
         </form>
         <div class="box">
@@ -72,11 +93,30 @@
             </div>
         </div>
     </div>
-    @if (ViewData["LockoutEndDate"] != null)
-    {
-        <div class="alert alert-danger" role="alert">
-            Your account is locked. Please try again later. Unlock time: @ViewData["LockoutEndDate"]
-        </div>
-    }
 </body>
 </html>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var signInBtn = document.getElementById("signInBtn");
+        var loginInput = document.getElementById("loginInput");
+        var passwordInput = document.getElementById("passwordInput");
+        var errorMessage = document.getElementById("errorMessage");
+
+        signInBtn.addEventListener("click", function () {
+            if (loginInput.value === "" || passwordInput.value === "") {
+                errorMessage.classList.add("alert-show");
+                setTimeout(function () {
+                    errorMessage.style.opacity = '0';
+                    setTimeout(function () {
+                        errorMessage.classList.remove("alert-show");
+                        errorMessage.style.opacity = '1';
+                    }, 3000); // czas animacji komunikatu w milisekundach
+                }, 4000); // czas wyświetlania komunikatu w milisekundach
+            } else {
+                errorMessage.style.display = "none";
+                document.getElementById("loginForm").submit();
+            }
+        });
+    });
+</script>
