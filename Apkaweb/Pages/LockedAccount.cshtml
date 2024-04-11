@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model Apkaweb.Pages.LockedAccountModel
 @{
 }
@@ -7,29 +7,77 @@
 <html>
 <head>
     <title>Locked Account Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .btn-danger {
+            margin-right: 5px;
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 20px;
+            width: 100px;
+            align-content: center;
+            margin-left: 5px;
+        }
+
+        .box {
+            margin: 5px;
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            max-width: 100%;
+            text-align: left;
+        }
+
+        .flex-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 5px;
+            margin-bottom: 3px;
+        }
+
+        input {
+            width: 500px;
+        }
+
+        .btn-primary {
+            padding: 3px;
+            margin-top: 15px;
+            margin-left: 350px;
+            width: 150px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Locked Account Page</h1>
-    <p>The account for user @Model.Username is locked.</p>
-
-    <form method="post">
-        <div>
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" value="@Model.Username" readonly />
-        </div>
-        <div>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" />
-        </div>
-        <div>
-            <label for="question">Security Question:</label>
-            <p>@Model.SecurityQuestion</p>
-        </div>
-        <div>
-            <label for="answer">Answer:</label>
-            <input type="text" id="answer" name="answer" />
-        </div>
-        <button type="submit">Submit</button>
-    </form>
+    <div class="d-flex justify-content-between">
+        <h1>Locked Account</h1>
+        <a href="/Index" class="btn btn-danger"><b>Go back</b></a>
+    </div>
+    <p>Hi @Model.Username, unfortunately your account was locked.</p>
+    <div class="box">
+        <form method="post">
+            <div class="flex-container">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" value="@Model.Username" readonly />
+            </div>
+            <div class="flex-container">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" />
+            </div>
+            <div class="flex-container">
+                <label for="question">Security Question:</label>
+                <p style="margin-bottom: 5px;">@Model.SecurityQuestion</p>
+            </div>
+            <div class="flex-container">
+                <label for="answer">Answer:</label>
+                <input type="text" id="answer" name="answer" />
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
 </body>
 </html>
