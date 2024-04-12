@@ -92,6 +92,9 @@ namespace Apkaweb.Pages
 
                         DateTime failedAttemptDate = DateTime.Now;
 
+                        // zapisanie próby logowania do tabeli noUser
+                        await LogFailedLoginAttemptToNoUserTable(connection, login, password, failedAttemptDate);
+
                         // pobranie aktualnej liczby nieudanych prób logowania dla użytkownika
                         int failedAttempts = await GetFailedLoginAttempts(connection, login);
 
@@ -122,6 +125,18 @@ namespace Apkaweb.Pages
             using (var command = new MySqlCommand(query, connection))
             {
                 command.Parameters.AddWithValue("@Username", username);
+                await command.ExecuteNonQueryAsync();
+            }
+        }
+
+        private async Task LogFailedLoginAttemptToNoUserTable(MySqlConnection connection, string username, string password, DateTime attemptTime)
+        {
+            string query = "INSERT INTO noUser (Username, Password, AttemptTime) VALUES (@Username, @Password, @AttemptTime)";
+            using (var command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@Username", username);
+                command.Parameters.AddWithValue("@Password", password);
+                command.Parameters.AddWithValue("@AttemptTime", attemptTime);
                 await command.ExecuteNonQueryAsync();
             }
         }
