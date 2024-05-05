@@ -49,8 +49,8 @@ namespace Apkaweb.Pages
                     TimeSpan remainingTime = lockoutEndDate - DateTime.Now;
                     ViewData["LockoutEndDate"] = $"{remainingTime.Days} days, {remainingTime.Hours} hours, {remainingTime.Minutes} minutes, {remainingTime.Seconds} seconds";
                     string remainingTimeString = $"Your account is temporarily locked. Please try again after: {remainingTime}";
-                    
-                    return Page(); 
+
+                    return Page();
                 }
 
                 string query = "SELECT COUNT(*) FROM Users WHERE Username = @Username AND Password = @Password";
