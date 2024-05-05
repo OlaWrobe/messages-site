@@ -29,12 +29,19 @@ namespace Apkaweb.Pages
             {
                 await connection.OpenAsync();
 
-                string query = "SELECT q.question FROM questions q JOIN Users u ON u.QuestionId = q.id WHERE u.Username = @Username";
+                string query = "SELECT q.question, u.Password FROM questions q JOIN Users u ON u.QuestionId = q.id WHERE u.Username = @Username";
 
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Username", username);
-                    SecurityQuestion = (string)await command.ExecuteScalarAsync();
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        if (reader.Read())
+                        {
+                            SecurityQuestion = reader.GetString(0);
+                            string password = reader.GetString(1);
+                        }
+                    }
                 }
             }
             return Page();
