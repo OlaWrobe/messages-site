@@ -82,6 +82,9 @@
             <div class="alert alert-danger" role="alert" id="errorMessage">
                 Please fill in both username and password fields.
             </div>
+            <div class="alert alert-info" role="alert" id="lockoutMessage" style="display:none;">
+                Account is temporarily locked. Please try again after: <span id="lockoutTime"></span>
+            </div>
             <div class="page-button">
                 <button type="button" class="btn btn-primary" id="signInBtn">Sign in</button>
             </div>
@@ -93,30 +96,45 @@
             </div>
         </div>
     </div>
-</body>
-</html>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var signInBtn = document.getElementById("signInBtn");
-        var loginInput = document.getElementById("loginInput");
-        var passwordInput = document.getElementById("passwordInput");
-        var errorMessage = document.getElementById("errorMessage");
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var signInBtn = document.getElementById("signInBtn");
+            var loginInput = document.getElementById("loginInput");
+            var passwordInput = document.getElementById("passwordInput");
+            var errorMessage = document.getElementById("errorMessage");
+            var lockoutMessage = document.getElementById("lockoutMessage");
+            var lockoutTime = document.getElementById("lockoutTime");
 
-        signInBtn.addEventListener("click", function () {
-            if (loginInput.value === "" || passwordInput.value === "") {
-                errorMessage.classList.add("alert-show");
-                setTimeout(function () {
-                    errorMessage.style.opacity = '0';
+            signInBtn.addEventListener("click", function () {
+                if (loginInput.value === "" || passwordInput.value === "") {
+                    errorMessage.classList.add("alert-show");
                     setTimeout(function () {
-                        errorMessage.classList.remove("alert-show");
-                        errorMessage.style.opacity = '1';
-                    }, 3000); // czas animacji komunikatu w milisekundach
-                }, 4000); // czas wyświetlania komunikatu w milisekundach
-            } else {
-                errorMessage.style.display = "none";
-                document.getElementById("loginForm").submit();
+                        errorMessage.style.opacity = '0';
+                        setTimeout(function () {
+                            errorMessage.classList.remove("alert-show");
+                            errorMessage.style.opacity = '1';
+                        }, 3000); // czas animacji komunikatu w milisekundach
+                    }, 4000); // czas wyświetlania komunikatu w milisekundach
+                } else {
+                    errorMessage.style.display = "none";
+                    lockoutMessage.style.display = "none"; // Ukryj komunikat o czasie zablokowania przy kolejnej próbie logowania
+                    document.getElementById("loginForm").submit();
+                }
+            });
+
+            // Funkcja do aktualizacji komunikatu o czasie zablokowania
+            function updateLockoutMessage(timeString) {
+                lockoutTime.textContent = timeString;
+                lockoutMessage.style.display = "block";
+            }
+
+            // Kod JavaScript, który aktualizuje komunikat o czasie zablokowania konta
+            var lockoutEndDateString = '@ViewData["LockoutEndDate"]';
+            if (lockoutEndDateString !== "") {
+                updateLockoutMessage(lockoutEndDateString);
             }
         });
-    });
-</script>
+    </script>
+</body>
+</html>
